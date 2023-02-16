@@ -33,7 +33,7 @@ saveDMSPDFLib.on('failed', async (job, error) => {
     const saveLog = new SaveLogPrefGoiania(dataToSave)
     const idLogNfsPrefGynDms = await saveLog.save()
 
-    logger.error(`[SaveDMSPDF-FAILED] - ID ${idLogNfsPrefGynDms} | ${settings.codeCompanieAccountSystem} - ${settings.nameCompanie} - ${settings.federalRegistration} | ${settings.dateStartDown} - ${settings.dateEndDown}`)
+    logger.error(`[SaveDMSPDF-FAILED] ID ${idLogNfsPrefGynDms} | ${settings.codeCompanieAccountSystem} | ${settings.nameCompanie} | ${settings.federalRegistration} | ${settings.dateStartDown} - ${settings.dateEndDown}`)
     logger.error(error)
 })
 
@@ -61,5 +61,5 @@ saveDMSPDFLib.on('completed', async (job) => {
     const saveLog = new SaveLogPrefGoiania(dataToSave)
     const idLogNfsPrefGynDms = await saveLog.save()
 
-    logger.info(`[SaveDMSPDF-SUCCESS] - ID ${idLogNfsPrefGynDms} | ${settings.codeCompanieAccountSystem} - ${settings.nameCompanie} - ${settings.federalRegistration} | ${settings.dateStartDown} - ${settings.dateEndDown}`)
+    logger.info(`[SaveDMSPDF-SUCCESS] ID ${idLogNfsPrefGynDms} | ${settings.codeCompanieAccountSystem} | ${settings.nameCompanie} | ${settings.federalRegistration} | ${settings.dateStartDown} - ${settings.dateEndDown}`)
 })

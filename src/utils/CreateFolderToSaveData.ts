@@ -1,6 +1,7 @@
+import 'dotenv/config'
+
 import fs from 'fs'
 import path from 'path'
-import 'dotenv/config'
 
 import { ISettingsGoiania } from '@scrapings/_interfaces'
 
@@ -57,23 +58,9 @@ const mountFolder = (settings: ISettingsGoiania, folder: string) => {
     return folderComplete
 }
 
-const createFolderToSaveData = async (settings: ISettingsGoiania, folderRoutineAutomactic = false): Promise<string> => {
+const createFolderToSaveData = (settings: ISettingsGoiania): string => {
     const folderToSaveXMLsGoiania = process.env.FOLDER_TO_SAVE_XMLs_GOIANIA
-    const folderToSaveXMLsGoianiaRotinaAutomatica = process.env.FOLDER_TO_SAVE_XMLs_GOIANIA_ROT_AUT
-    let folder = ''
-
-    if (settings.typeLog === 'success') {
-        folder = mountFolder(settings, folderToSaveXMLsGoiania)
-        // when exists folderToSaveXMLsGoianiaRotinaAutomatica and I want to process folderRoutineAutomactic
-        if (folderRoutineAutomactic && settings.codeCompanieAccountSystem) {
-            if (folderToSaveXMLsGoianiaRotinaAutomatica) {
-                folder = mountFolder(settings, folderToSaveXMLsGoianiaRotinaAutomatica)
-            } else {
-                return ''
-            }
-        }
-    }
-
+    const folder = mountFolder(settings, folderToSaveXMLsGoiania)
     return folder
 }
 

@@ -23,21 +23,22 @@ export class SaveLogPrefGoiania {
         this.s3 = s3Factory()
     }
 
-    private async getScreenshot (): Promise<string> {
+    private async getScreenshot (): Promise<void> {
         if (this.saveScreenshot) {
             const screenshot = await this.page.screenshot({ encoding: 'base64', type: 'png', fullPage: true })
 
             const resultUpload = await this.s3.upload(screenshot, `${process.env.TENANT}/nfs-gyn-dms-print`, 'png', 'image/png', 'bayhero-aeron')
-            return resultUpload.Location
+
+            if (this.dataToSave.urlPrintLog) await this.s3.delete(this.dataToSave.urlPrintLog)
+
+            this.dataToSave.urlPrintLog = resultUpload.Location
         }
-        return ''
     }
 
     async save (): Promise<string> {
         try {
             if (this.dataToSave.idLogNfsPrefGynDms) {
-                const urlPrint = await this.getScreenshot()
-                this.dataToSave.urlPrintLog = urlPrint
+                await this.getScreenshot()
 
                 const response = await this.fetchFactory.put<ILogNotaFiscalApi>(
                     `${this.urlBase}/${this.dataToSave.idLogNfsPrefGynDms}`,
@@ -48,8 +49,7 @@ export class SaveLogPrefGoiania {
 
                 return response.data.idLogNfsPrefGynDms
             } else {
-                const urlPrint = await this.getScreenshot()
-                this.dataToSave.urlPrintLog = urlPrint
+                await this.getScreenshot()
 
                 const response = await this.fetchFactory.post<ILogNotaFiscalApi>(
                     `${this.urlBase}`,

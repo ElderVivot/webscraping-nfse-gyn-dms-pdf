@@ -6,8 +6,8 @@ export const CloseOnePage = async (page: Page, type: string = 'Empresa'): Promis
     try {
         await page.close()
         if (type === 'Empresa') {
-            logger.info('\t[Final-Empresa] - Fechando aba')
-            logger.info('\t-------------------------------------------------')
+            logger.info('[Final-Empresa] - Fechando aba')
+            logger.info('-------------------------------------------------')
         } else {
             logger.info(`[Final-${type}] - Fechando aba`)
             logger.info('-------------------------------------------------')

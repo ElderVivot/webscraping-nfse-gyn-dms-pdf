@@ -153,7 +153,7 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
 //     password: 'soma@123',
 //     idAccessPortals: '78682b66-280b-4bfa-a07c-b8006f9b45e9',
 //     typeProcessing: 'MainAddQueueLoguin',
-//     dateStartDown: '2023-01-01',
-//     dateEndDown: '2023-01-31',
+//     dateStartDown: '2023-01-01 03:00',
+//     dateEndDown: '2023-01-31 03:00',
 //     cityRegistration: '2897202'
 // }).then(_ => console.log(_))

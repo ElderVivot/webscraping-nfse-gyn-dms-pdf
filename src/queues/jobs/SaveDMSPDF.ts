@@ -19,16 +19,17 @@ export const SaveDMSPDFJobs = {
     async handle ({ data: { settings, bufferPDF } }: IData): Promise<void> {
         const s3 = s3Factory()
 
-        const pathSaveData = await createFolderToSaveData(settings)
+        const pathSaveData = createFolderToSaveData(settings)
         const buffer = Buffer.from(bufferPDF)
 
         await fsPromises.writeFile(path.resolve(pathSaveData, '_relatorio.pdf'), buffer)
 
         const resultUpload = await s3.upload(buffer, `${process.env.TENANT}/nfs-gyn-dms`, 'pdf', 'application/pdf', 'bayhero-aeron')
+        if (settings.urlFileDms) await this.s3.delete(settings.urlFileDms)
         settings.urlFileDms = resultUpload.Location
 
         logger.info('---------------------------------------------------')
-        logger.info(`[SaveDMSPDF-PROCESSING] | ${settings.idCompanie} | ${settings.codeCompanieAccountSystem} | ${settings.nameCompanie} | ${settings.federalRegistration} | ${settings.cityRegistration} | ${settings.month}/${settings.year}`)
+        logger.info(`[SaveDMSPDF-PROCESSING] | ${settings.codeCompanieAccountSystem} | ${settings.nameCompanie} | ${settings.federalRegistration} | ${settings.cityRegistration} | ${settings.month}/${settings.year}`)
         logger.info('---------------------------------------------------')
     }
 }
