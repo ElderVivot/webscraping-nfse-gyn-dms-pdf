@@ -1,5 +1,4 @@
 import { ISettingsGoiania } from '@scrapings/_interfaces'
-// import { MainNFGoias } from '@scrapings/MainNFGoiasProcessTheQueue'
 import { MainProcessLoguin } from '@scrapings/MainProcessLoguin'
 
 interface IData {
@@ -9,7 +8,7 @@ interface IData {
 }
 
 const ScrapingNotesJob = {
-    key: 'ScrapingNotesPrefGyn',
+    key: 'ScrapingNotesPrefGynDms',
     async handle ({ data }: IData): Promise<void> {
         const settings = data.settings
 

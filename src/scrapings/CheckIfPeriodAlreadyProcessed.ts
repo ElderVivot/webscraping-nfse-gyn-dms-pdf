@@ -16,7 +16,7 @@ export async function CheckIfPeriodAlreadyProcessed (page: Page, settings: ISett
         const dateStartDownString = dateFactory.formatDate(new Date(settings.dateStartDown), 'yyyy-MM-dd')
         const dateEndDownString = dateFactory.formatDate(new Date(settings.dateEndDown), 'yyyy-MM-dd')
 
-        const urlBase = `${urlBaseApi}/log_nfs_pref_gyn`
+        const urlBase = `${urlBaseApi}/log_nfs_pref_gyn_dms`
         const urlFilter = `?cityRegistration=${settings.cityRegistration}&dateStartDownBetween=${dateStartDownString}&dateEndDownBetween=${dateEndDownString}`
         const response = await fetchFactory.get<ILogNotaFiscalApi[]>(`${urlBase}${urlFilter}`, { headers: { tenant: process.env.TENANT } })
         if (response.status >= 400) throw response

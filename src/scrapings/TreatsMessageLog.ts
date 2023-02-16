@@ -2,7 +2,6 @@
 import { Browser, Page } from 'puppeteer'
 
 import { logger } from '@common/log'
-import { saveLogDynamo } from '@services/dynamodb'
 import { SaveLogPrefGoiania } from '@services/SaveLogPrefGoiania'
 
 import { ILogNotaFiscalApi, ISettingsGoiania } from './_interfaces'
@@ -20,7 +19,7 @@ export class TreatsMessageLog {
             if (this.settings.typeLog === 'error') { this.settings.qtdTimesReprocessed += 1 }
 
             const dataToSave: ILogNotaFiscalApi = {
-                idLogNfsPrefGyn: this.settings.idLogNfsPrefGyn,
+                idLogNfsPrefGynDms: this.settings.idLogNfsPrefGynDms,
                 idAccessPortals: this.settings.idAccessPortals,
                 idCompanie: this.settings.idCompanie,
                 typeLog: this.settings.typeLog || 'error',
@@ -33,7 +32,9 @@ export class TreatsMessageLog {
                 dateStartDown: new Date(this.settings.dateStartDown).toISOString(),
                 dateEndDown: new Date(this.settings.dateEndDown).toISOString(),
                 qtdNotesDown: this.settings.qtdNotes || 0,
-                qtdTimesReprocessed: this.settings.qtdTimesReprocessed || 0
+                qtdTimesReprocessed: this.settings.qtdTimesReprocessed || 0,
+                urlPrintLog: this.settings.urlPrintLog || '',
+                urlFileDms: this.settings.urlFileDms || ''
             }
 
             const saveLogPref = new SaveLogPrefGoiania(dataToSave, true, this.page)
@@ -45,8 +46,6 @@ export class TreatsMessageLog {
                 ...this.settings
             })
         }
-
-        await saveLogDynamo(this.settings)
 
         if (!this.noClosePage) await this.page.close()
         if (this.browser) await this.browser.close()

@@ -4,14 +4,14 @@ export enum ECompanieStatus {ACTIVE = 'ACTIVE', INACTIVE = 'INACTIVE'}
 export type TTypeStatusAccess = 'ACTIVE' | 'INACTIVE'
 
 export interface ISettingsGoiania {
-    idLogNfsPrefGyn?: string
+    idLogNfsPrefGynDms?: string
     idAccessPortals?: string
     idCompanie?: string
     loguin?: string
     password?: string
     typeProcessing?: 'MainAddQueueLoguin' | 'MainAddQueuCompanie'
-    dateStartDown?: Date
-    dateEndDown?: Date
+    dateStartDown?: Date | string
+    dateEndDown?: Date | string
     typeLog?: TTypeLog
     codeCompanieAccountSystem?: string
     nameCompanie?: string
@@ -29,10 +29,13 @@ export interface ISettingsGoiania {
     pathFile?: string
     nameStep?: string
     errorResponseApi?: any
+    urlPrintLog?: string
+    urlFileDms?: string
+    bufferPDF?: Buffer | any
 }
 
 export interface ILogNotaFiscalApi {
-    idLogNfsPrefGyn: string
+    idLogNfsPrefGynDms: string
     idAccessPortals: string
     login?: string
     password?: string
@@ -48,6 +51,8 @@ export interface ILogNotaFiscalApi {
     messageError: string
     qtdNotesDown: number
     qtdTimesReprocessed: number
+    urlPrintLog: string
+    urlFileDms: string
 }
 
 export interface IAccessPortals {

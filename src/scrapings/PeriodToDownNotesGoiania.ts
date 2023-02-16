@@ -1,5 +1,8 @@
 import { IDateAdapter } from '@common/adapters/date/date-adapter'
 import { makeDateImplementation } from '@common/adapters/date/date-factory'
+import { logger } from '@common/log'
+
+const DAY_PROCESS_DOWNOAD = process.env.DAY_PROCESS_DOWNOAD || 1
 
 const getDateStart = (dateFactory: IDateAdapter): Date => {
     const dateStart = dateFactory.subMonths(new Date(), Number(process.env.RETROACTIVE_MONTHS_TO_DOWNLOAD) || 0)
@@ -11,14 +14,11 @@ const getDateEnd = (): Date => {
     const today = new Date()
     const dayToday = today.getDate()
 
-    if (dayToday >= 2 && dayToday < 9) {
+    // example -> if DAY_PROCESS_DOWNOAD = 2, then when day 2 or greather get date last month. Else day 1 get two months ago
+    if (dayToday >= DAY_PROCESS_DOWNOAD) {
         return new Date(today.getFullYear(), today.getMonth(), 0)
-    } else if (dayToday >= 9 && dayToday < 16) {
-        return new Date(today.getFullYear(), today.getMonth(), 7)
-    } else if (dayToday >= 16 && dayToday < 23) {
-        return new Date(today.getFullYear(), today.getMonth(), 14)
-    } else if (dayToday >= 23 || dayToday === 1) {
-        return new Date(today.getFullYear(), today.getMonth(), 21)
+    } else {
+        return new Date(today.getFullYear(), today.getMonth() - 1, 0)
     }
 }
 
@@ -29,6 +29,7 @@ export async function PeriodToDownNotesGoiania (): Promise<{dateStart: Date, dat
         const dateEnd = getDateEnd()
 
         if (dateStart >= dateEnd) {
+            logger.info(`DONT PROCESS NOW BECAUSE DAY START ${dateStart.toISOString()} AND DAY END ${dateEnd.toISOString()}`)
             throw 'DONT_HAVE_NEW_PERIOD_TO_PROCESS'
         }
 

@@ -10,7 +10,7 @@ export const CheckIfExistNoteInPeriod = async (page: Page, settings: ISettingsGo
             return document.querySelector('body')?.textContent
         }) || ''
         aviso = aviso.normalize('NFD').replace(/[^a-zA-Z/ -]/g, '').toUpperCase()
-        if (aviso.indexOf('NENHUMA NFS-E ENCONTRADA') >= 0) {
+        if (aviso.indexOf('NAO HOUVE MOVIMENTO DE ESCRITURACAO FISCAL NESTE PERIODO') >= 0) {
             throw 'NOT_EXIST_NFSE'
         }
     } catch (error) {

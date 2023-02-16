@@ -11,16 +11,11 @@ export const SelectPeriodToDownload = async (page: Page, settings: ISettingsGoia
         await checkIfLoadedThePage(page, 'cpo', true)
         const frame = page.frames().find(frame => frame.name() === 'cpo')
 
-        const dayInitialMonth = zeroLeft(new Date(settings.dateStartDown).getDate().toString(), 2)
-        const dayFinalMonth = zeroLeft(new Date(settings.dateEndDown).getDate().toString(), 2)
         const month = zeroLeft(settings.month.toString(), 2)
 
         if (frame) {
-            await frame.waitForSelector('[name=txt_dia_inicial]')
-            await frame.select('[name=txt_dia_inicial]', `${dayInitialMonth}`)
-            await frame.select('[name=txt_dia_final]', `${dayFinalMonth}`)
+            await frame.waitForSelector('[name=sel_mes]')
             await frame.select('[name=sel_mes]', `${month}`)
-
             await frame.evaluate(`document.querySelector('[name=txt_ano]').value="${settings.year.toString()}";`)
         } else {
             throw 'NOT_FOUND_FRAME_CPO'

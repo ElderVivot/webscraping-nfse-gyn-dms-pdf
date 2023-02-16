@@ -8,7 +8,6 @@ import { logger } from '@common/log'
 import { scrapingNotesLib } from '@queues/lib/ScrapingNotes'
 import { IAccessPortals, ILogNotaFiscalApi, TTypeLog } from '@scrapings/_interfaces'
 import { urlBaseApi } from '@scrapings/_urlBaseApi'
-import { saveLogDynamo } from '@services/dynamodb'
 import { SaveLogPrefGoiania } from '@services/SaveLogPrefGoiania'
 
 function getDateStartAndEnd (dateFactory: IDateAdapter) {
@@ -30,7 +29,7 @@ async function processNotes (typeLog: TTypeLog) {
 
         const { dateStartString, dateEndString } = getDateStartAndEnd(dateFactory)
 
-        const urlBase = `${urlBaseApi}/log_nfs_pref_gyn`
+        const urlBase = `${urlBaseApi}/log_nfs_pref_gyn_dms`
         const urlFilter = `?typeLog=${typeLog}&dateStartDownBetween=${dateStartString}&dateEndDownBetween=${dateEndString}`
         const response = await fetchFactory.get<ILogNotaFiscalApi[]>(`${urlBase}${urlFilter}`, { headers: { tenant: process.env.TENANT } })
         if (response.status >= 400) throw response
@@ -55,7 +54,7 @@ async function processNotes (typeLog: TTypeLog) {
                         })
                         await saveLogPrefGoiania.save()
                     } else {
-                        const jobId = `${logNotaFiscal.idLogNfsPrefGyn}_${dateFactory.formatDate(new Date(logNotaFiscal.dateStartDown), 'yyyyMMdd')}_${dateFactory.formatDate(new Date(logNotaFiscal.dateEndDown), 'yyyyMMdd')}`
+                        const jobId = `${logNotaFiscal.idLogNfsPrefGynDms}_${dateFactory.formatDate(new Date(logNotaFiscal.dateStartDown), 'yyyyMMdd')}_${dateFactory.formatDate(new Date(logNotaFiscal.dateEndDown), 'yyyyMMdd')}`
                         const job = await scrapingNotesLib.getJob(jobId)
                         const failed = await job?.isFailed()
                         if (job?.finishedOn || failed) await job.remove() // remove job if already fineshed to process again, if dont fineshed yet, so dont process
@@ -75,28 +74,15 @@ async function processNotes (typeLog: TTypeLog) {
                     }
                 } catch (error) {
                     if (error.toString().indexOf('TreatsMessageLog') < 0) {
-                        await saveLogDynamo({
-                            ...logNotaFiscal,
-                            dateStartDown: new Date(logNotaFiscal.dateStartDown),
-                            dateEndDown: new Date(logNotaFiscal.dateEndDown),
-                            messageError: error,
-                            messageLog: 'NFSeGoianiaReprocessErrors',
-                            pathFile: __filename,
-                            typeLog: 'error'
-                        })
+                        logger.error(error)
                     }
                 }
             }
         }
     } catch (error) {
         const responseFetch = handlesFetchError(error)
-        await saveLogDynamo({
-            messageError: error,
-            messageLog: 'NFSeGoianiaReprocessErrors',
-            pathFile: __filename,
-            typeLog: 'error',
-            errorResponseApi: responseFetch
-        })
+        if (responseFetch) logger.error(responseFetch)
+        else logger.error(error)
     }
 }
 

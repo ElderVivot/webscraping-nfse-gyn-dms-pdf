@@ -3,7 +3,7 @@ import { Page } from 'puppeteer'
 import { ISettingsGoiania } from './_interfaces'
 import { TreatsMessageLog } from './TreatsMessageLog'
 
-export const ClickListarXML = async (page: Page, settings: ISettingsGoiania, newPagePromise: Promise<Page>): Promise<void> => {
+export const ClickListar = async (page: Page, settings: ISettingsGoiania, newPagePromise: Promise<Page>): Promise<void> => {
     try {
         const frame = page.frames().find(frame => frame.name() === 'cpo')
         if (frame) {
@@ -16,9 +16,9 @@ export const ClickListarXML = async (page: Page, settings: ISettingsGoiania, new
         await page.goto(popup.url(), { waitUntil: 'networkidle0', timeout: 6000000 }) // aguarda até 60 minutos carregar a página pra fazer o download
     } catch (error) {
         settings.typeLog = 'error'
-        settings.messageLog = 'ClickListarXML'
+        settings.messageLog = 'ClickListar'
         settings.messageError = error
-        settings.messageLogToShowUser = 'Erro ao listar os XMLs.'
+        settings.messageLogToShowUser = 'Erro ao clicar no botão de listar notas.'
         settings.pathFile = __filename
 
         const treatsMessageLog = new TreatsMessageLog(page, settings)
