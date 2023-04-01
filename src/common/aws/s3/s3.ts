@@ -50,10 +50,10 @@ export class AwsS3 {
         }
     }
 
-    async delete (key: string): Promise<IDeleteAwsS3> {
+    async delete (key: string, s3BucketName: string): Promise<IDeleteAwsS3> {
         try {
             const result = await this.connection.deleteObject({
-                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Bucket: s3BucketName,
                 Key: key
             }).promise()
 

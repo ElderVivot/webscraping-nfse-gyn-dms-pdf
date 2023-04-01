@@ -25,7 +25,7 @@ export const SaveDMSPDFJobs = {
         await fsPromises.writeFile(path.resolve(pathSaveData, '_relatorio.pdf'), buffer)
 
         const resultUpload = await s3.upload(buffer, `${process.env.TENANT}/nfs-gyn-dms`, 'pdf', 'application/pdf', 'bayhero-aeron')
-        if (settings.urlFileDms) await this.s3.delete(settings.urlFileDms)
+        if (settings.urlFileDms) await s3.delete(settings.urlFileDms, 'bayhero-aeron')
         settings.urlFileDms = resultUpload.Location
 
         logger.info('---------------------------------------------------')

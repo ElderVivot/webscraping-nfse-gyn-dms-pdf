@@ -142,7 +142,7 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
         }
 
         logger.info('[Final-Loguin] - Todos os dados deste loguin processados, fechando navegador.')
-        // if (browser) await browser.close()
+        if (browser) await browser.close()
     } catch (error) {
         logger.error(error)
     }
