@@ -11,7 +11,7 @@ import { CheckAndCloseIfExistPopupWarning } from './CheckAndCloseIfExistPopupWar
 import { CheckIfAvisoFrameMnuAfterEntrar } from './CheckIfAvisoFrameMnuAfterEntrar'
 import { CheckIfCompanieIsValid } from './CheckIfCompanieIsValid'
 import { CheckIfEmpresaEstaBaixada } from './CheckIfEmpresaEstaBaixada'
-import { CheckIfExistNoteInPeriod } from './CheckIfExistNoteInPeriod'
+// import { CheckIfExistNoteInPeriod } from './CheckIfExistNoteInPeriod'
 import { CheckIfPeriodAlreadyProcessed } from './CheckIfPeriodAlreadyProcessed'
 import { CheckIfSelectLoaded } from './CheckIfSelectLoaded'
 import { ClickDownloadPDFDMS } from './ClickDownloadPDFDMS'
@@ -126,8 +126,8 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
                 await ClickListar(pageEmpresa, settings, newPagePromise)
 
                 // Verifica se tem notas no período solicitado, caso não, para o processamento
-                logger.info('18 - Checando se existe nota no período')
-                await CheckIfExistNoteInPeriod(pageEmpresa, settings)
+                // logger.info('18 - Checando se existe nota no período')
+                // await CheckIfExistNoteInPeriod(pageEmpresa, settings)
 
                 logger.info('19 - Pegando o buffer do PDF pra salvar as notas')
                 await GetBufferDataNotes(pageEmpresa, settings)
