@@ -22,7 +22,7 @@ export const SaveDMSPDFJobs = {
         const pathSaveData = createFolderToSaveData(settings)
         const buffer = Buffer.from(bufferPDF)
 
-        await fsPromises.writeFile(path.resolve(pathSaveData, '_relatorio.pdf'), buffer)
+        await fsPromises.writeFile(path.resolve(pathSaveData, `${settings.codeCompanieAccountSystem}-${settings.nameCompanie.substring(0, 60)}`), buffer)
 
         const resultUpload = await s3.upload(buffer, `${process.env.TENANT}/nfs-gyn-dms`, 'pdf', 'application/pdf', 'bayhero-aeron')
         if (settings.urlFileDms) await s3.delete(settings.urlFileDms, 'bayhero-aeron')
