@@ -29,7 +29,7 @@ export class SaveLogPrefGoiania {
 
             const resultUpload = await this.s3.upload(screenshot, `${process.env.TENANT}/nfs-gyn-dms-print`, 'png', 'image/png', 'bayhero-aeron')
 
-            if (this.dataToSave.urlPrintLog) await this.s3.delete(this.dataToSave.urlPrintLog)
+            if (this.dataToSave.urlPrintLog) await this.s3.delete(this.dataToSave.urlPrintLog, 'bayhero-aeron')
 
             this.dataToSave.urlPrintLog = resultUpload.Location
         }
