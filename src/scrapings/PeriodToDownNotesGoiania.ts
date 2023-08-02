@@ -2,7 +2,7 @@ import { IDateAdapter } from '@common/adapters/date/date-adapter'
 import { makeDateImplementation } from '@common/adapters/date/date-factory'
 import { logger } from '@common/log'
 
-const DAY_PROCESS_DOWNOAD = process.env.DAY_PROCESS_DOWNOAD || 1
+const DAY_PROCESS_DOWNOAD = Number(process.env.DAY_PROCESS_DOWNOAD) || 1
 
 const getDateStart = (dateFactory: IDateAdapter): Date => {
     const dateStart = dateFactory.subMonths(new Date(), Number(process.env.RETROACTIVE_MONTHS_TO_DOWNLOAD) || 0)
