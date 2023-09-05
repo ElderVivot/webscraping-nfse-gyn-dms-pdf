@@ -8,6 +8,7 @@ import { ISettingsGoiania } from './_interfaces'
 import { AlertSimplesNacional } from './AlertSimplesNacional'
 import { ChangeCompanie } from './ChangeCompanie'
 import { CheckAndCloseIfExistPopupWarning } from './CheckAndCloseIfExistPopupWarning'
+import { CheckAndCloseIfMessageMEI } from './CheckAndCloseIfMessageMEI'
 import { CheckIfAvisoFrameMnuAfterEntrar } from './CheckIfAvisoFrameMnuAfterEntrar'
 import { CheckIfCompanieIsValid } from './CheckIfCompanieIsValid'
 import { CheckIfEmpresaEstaBaixada } from './CheckIfEmpresaEstaBaixada'
@@ -81,6 +82,7 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
                 const pageEmpresa = await browser.newPage()
                 await pageEmpresa.setViewport({ width: 0, height: 0 })
                 await OpenCompanieInNewPage(pageEmpresa, settings, urlActual)
+                await CheckAndCloseIfMessageMEI(pageEmpresa)
 
                 logger.info('6 - Realizando a troca pra empresa atual')
                 await ChangeCompanie(pageEmpresa, settings)
