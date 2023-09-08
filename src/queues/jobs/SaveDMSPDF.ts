@@ -6,6 +6,7 @@ import { s3Factory } from '@common/aws/s3/s3'
 import { logger } from '@common/log'
 import { ISettingsGoiania } from '@scrapings/_interfaces'
 import createFolderToSaveData from '@utils/CreateFolderToSaveData'
+import { treateTextField } from '@utils/functions'
 
 interface IData {
     data: {
@@ -22,7 +23,8 @@ export const SaveDMSPDFJobs = {
         const pathSaveData = createFolderToSaveData(settings)
         const buffer = Buffer.from(bufferPDF)
 
-        const nameFile = `${settings.codeCompanieAccountSystem}-${settings.nameCompanie.substring(0, 60)}.pdf`
+        const nameCompanie = treateTextField(settings.nameCompanie).substring(0, 60).replace('\\', '').replace('/', '')
+        const nameFile = `${settings.codeCompanieAccountSystem}-${nameCompanie}.pdf`
         await fsPromises.writeFile(path.resolve(pathSaveData, nameFile), buffer)
 
         const resultUpload = await s3.upload(buffer, `${process.env.TENANT}/nfs-gyn-dms`, 'pdf', 'application/pdf', 'bayhero-aeron')
@@ -30,7 +32,7 @@ export const SaveDMSPDFJobs = {
         settings.urlFileDms = resultUpload.Location
 
         logger.info('---------------------------------------------------')
-        logger.info(`[SaveDMSPDF-PROCESSING] | ${settings.codeCompanieAccountSystem} | ${settings.nameCompanie} | ${settings.federalRegistration} | ${settings.cityRegistration} | ${settings.month}/${settings.year}`)
+        logger.info(`[SaveDMSPDF-PROCESSING] | ${settings.codeCompanieAccountSystem} | ${nameCompanie} | ${settings.federalRegistration} | ${settings.cityRegistration} | ${settings.month}/${settings.year}`)
         logger.info('---------------------------------------------------')
     }
 }
