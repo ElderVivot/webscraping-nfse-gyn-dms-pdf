@@ -53,6 +53,9 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
         logger.info('3 - Clicando no botão "Portal Contruinte"')
         await ClickPortalContribuinte(page, browser, settings)
 
+        await page.waitForTimeout(5000)
+        await CheckAndCloseIfMessageMEI(page)
+
         logger.info('4 - Pegando a relação de empresas que este contribuinte possui.')
         const optionsEmpresas = await GetOptionsEmpresas(page, browser, settings)
 
@@ -82,10 +85,13 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
                 const pageEmpresa = await browser.newPage()
                 await pageEmpresa.setViewport({ width: 0, height: 0 })
                 await OpenCompanieInNewPage(pageEmpresa, settings, urlActual)
-                await CheckAndCloseIfMessageMEI(pageEmpresa)
 
                 logger.info('6 - Realizando a troca pra empresa atual')
+                await pageEmpresa.waitForTimeout(2000)
+                await CheckAndCloseIfMessageMEI(pageEmpresa)
                 await ChangeCompanie(pageEmpresa, settings)
+                await pageEmpresa.waitForTimeout(5000)
+                await CheckAndCloseIfMessageMEI(pageEmpresa)
 
                 logger.info('7 - Checando se a troca foi realizada com sucesso')
                 await CheckIfSelectLoaded(pageEmpresa, settings)
@@ -97,9 +103,11 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
                 await CheckAndCloseIfExistPopupWarning(pageEmpresa)
 
                 logger.info('10 - Clicando no botão "NF-e Eletrônica"')
+                await CheckAndCloseIfMessageMEI(pageEmpresa)
                 await ClickNFeEletronica(pageEmpresa, settings)
 
                 logger.info('11 - Clicando no botão "Entrar"')
+                await CheckAndCloseIfMessageMEI(pageEmpresa)
                 await GotoLinkNFeEletrotinaEntrar(pageEmpresa, settings)
 
                 // Aviso depois do botão "Entrar" --> caso tenha aviso para o processamento desta
