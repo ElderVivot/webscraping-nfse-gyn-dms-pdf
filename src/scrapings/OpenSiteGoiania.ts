@@ -5,7 +5,7 @@ import { TreatsMessageLog } from './TreatsMessageLog'
 
 export const OpenSiteGoiania = async (page: Page, browser: Browser, settings: ISettingsGoiania): Promise<void> => {
     try {
-        await page.goto('https://www10.goiania.go.gov.br/Internet/Login.aspx', { timeout: 30000 })
+        await page.goto('https://www10.goiania.go.gov.br/Internet/Login.aspx', { timeout: 120000 })
         const textButtonEntrar = await page.evaluate(() => {
             return document.querySelector('input[value="ENTRAR"]')?.getAttribute('value')
         })
