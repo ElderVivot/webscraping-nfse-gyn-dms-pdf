@@ -62,6 +62,7 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
         // Pega a URL atual pra não ter que abrir do zero o processo
         const urlActual = page.url()
 
+        let numberProcessing = 0
         // Percorre o array de empresas
         for (const option of optionsEmpresas) {
             if (cityRegistration) if (option.inscricaoMunicipal !== settings.cityRegistration) continue
@@ -87,13 +88,14 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
                 await OpenCompanieInNewPage(pageEmpresa, settings, urlActual)
 
                 logger.info('6 - Realizando a troca pra empresa atual')
-                await pageEmpresa.waitForTimeout(2000)
-                await CheckAndCloseIfMessageMEI(pageEmpresa)
+                if (numberProcessing > 0) await CheckAndCloseIfMessageMEI(pageEmpresa, 7000)
                 await ChangeCompanie(pageEmpresa, settings)
-                await pageEmpresa.waitForTimeout(5000)
-                await CheckAndCloseIfMessageMEI(pageEmpresa)
+
+                numberProcessing += 1
 
                 logger.info('7 - Checando se a troca foi realizada com sucesso')
+                const existFrameToClose = await CheckAndCloseIfMessageMEI(pageEmpresa) // precisa de 2 pra poder encerrar certo
+                if (existFrameToClose) await CheckAndCloseIfMessageMEI(pageEmpresa)
                 await CheckIfSelectLoaded(pageEmpresa, settings)
 
                 logger.info('8 - Verificando se o "Contribuinte está com a situação Baixada/Suspensa"')
