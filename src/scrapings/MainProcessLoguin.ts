@@ -94,8 +94,8 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
                 numberProcessing += 1
 
                 logger.info('7 - Checando se a troca foi realizada com sucesso')
-                const existFrameToClose = await CheckAndCloseIfMessageMEI(pageEmpresa) // precisa de 2 pra poder encerrar certo
-                if (existFrameToClose) await CheckAndCloseIfMessageMEI(pageEmpresa)
+                await CheckAndCloseIfMessageMEI(pageEmpresa, 7000) // precisa de 2 pra poder encerrar certo
+                await CheckAndCloseIfMessageMEI(pageEmpresa, 7000)
                 await CheckIfSelectLoaded(pageEmpresa, settings)
 
                 logger.info('8 - Verificando se o "Contribuinte está com a situação Baixada/Suspensa"')
