@@ -6,12 +6,14 @@ import { TreatsMessageLog } from './TreatsMessageLog'
 export const CheckIfEmpresaEstaBaixada = async (page: Page, settings: ISettingsGoiania): Promise<void> => {
     try {
         await page.waitForTimeout(3000)
+        let companieBaixadaOrSupensa = false
         try {
             const selector = 'div[id*="GoianiaTheme_wtTelaPrincipal_block_wtMainContent_WebPatterns_wt"]' && 'div[id*="_block_wtContent1_wtLinks"] > div:nth-child(1)'
             let aviso: string = await page.$eval(selector, element => element.textContent)
             aviso = aviso ? aviso.normalize('NFD').replace(/[^a-zA-Z/ ]/g, '').toUpperCase() : ''
+
             if (aviso.indexOf('SITUACAO BAIXA') >= 0 || aviso.indexOf('SITUACAO SUSPENSAO') >= 0) {
-                throw 'BAIXADA_SUSPENSA'
+                companieBaixadaOrSupensa = true
             }
         } catch (error) {
             const selector = 'div[id*="_block_wtMainContent_wtMensagemParaLogarCertificado"] > label'
@@ -25,6 +27,8 @@ export const CheckIfEmpresaEstaBaixada = async (page: Page, settings: ISettingsG
                 throw 'AUTENTICAR_CERTIFICADO'
             }
         }
+
+        if (companieBaixadaOrSupensa) throw 'BAIXADA_SUSPENSA'
     } catch (error) {
         settings.typeLog = 'error'
         if (error === 'BAIXADA_SUSPENSA') {
