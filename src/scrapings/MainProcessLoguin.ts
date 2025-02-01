@@ -42,9 +42,9 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
     try {
         logger.info(`0 - Abrindo loguin ${settings.loguin}`)
         const settingsLaunch: any = {
-            headless: false,
-            slowMo: 300,
-            timeout: 120000
+            headless: true,
+            slowMo: 50,
+            args: ['--start-maximized']
         }
         if (PATH_EXECUTABLE_CHROMIUM) settingsLaunch.executablePath = PATH_EXECUTABLE_CHROMIUM
 
