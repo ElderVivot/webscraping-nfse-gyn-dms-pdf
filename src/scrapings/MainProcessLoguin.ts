@@ -30,6 +30,7 @@ import { OpenSiteGoiania } from './OpenSiteGoiania'
 import { SelectPeriodToDownload } from './SelectPeriodToDownload'
 
 // const HEADLESS = process.env.HEADLESS || 'YES' // nao funciona pra salvar o pdf o headless como false
+const PATH_EXECUTABLE_CHROMIUM = process.env.PATH_EXECUTABLE_CHROMIUM || ''
 
 export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<void> => {
     settings.loguin = settings.loguin.replace(/[^0-9]/g, '')
@@ -40,7 +41,14 @@ export const MainProcessLoguin = async (settings: ISettingsGoiania): Promise<voi
 
     try {
         logger.info(`0 - Abrindo loguin ${settings.loguin}`)
-        const browser = await puppeteer.launch({ headless: true, slowMo: 50, args: ['--start-maximized'] })
+        const settingsLaunch: any = {
+            headless: false,
+            slowMo: 300,
+            timeout: 120000
+        }
+        if (PATH_EXECUTABLE_CHROMIUM) settingsLaunch.executablePath = PATH_EXECUTABLE_CHROMIUM
+
+        const browser = await puppeteer.launch(settingsLaunch)
         const page = await browser.newPage()
         await page.setViewport({ width: 0, height: 0 })
 
